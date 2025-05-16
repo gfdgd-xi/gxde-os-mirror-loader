@@ -1,0 +1,39 @@
+name: Sync GXDE Mirror
+
+on:
+  workflow_call:
+
+jobs:  
+  build:
+    name: Sync
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Clone Repository
+        run: |
+          sudo apt update
+          sudo apt install git -y
+          git clone git@github.com:gfdgd-xi/gxde-os-mirror.git --depth=1
+          git clone git@github.com:gfdgd-xi/gxde-os-mirror-loader.git --depth=1
+
+      - name: Sync
+        env:
+          RSYNCPASSWORD: ${{ secrets.RSYNCPASSWORD }}
+          RSYNCURL: ${{ secrets.RSYNCURL }}
+        run: |
+          sudo apt install rsync -y
+          echo $PASSWORD > /tmp/password.pass
+          chmod 600 /tmp/password.pass
+          cp -rv gxde-os-mirror-loader/icons gxde-os-mirror
+          cp -rv gxde-os-mirror-loader/40*.html gxde-os-mirror
+          cp -rv gxde-os-mirror-loader/50*.html gxde-os-mirror
+          rsync --progress --delay-updates -avpP --password-file=/tmp/password.pass -av  $RSYNCURL gxde-os-mirror --max-size=100m
+          # 加载页面
+          cd gxde-os-mirror
+          python3 ../gxde-os-mirror-loader/build.py
+
+      - name: Add git repo
+        run: |
+          cd gxde-os-mirror
+          git add .
+          git commit -m "Sync: $(date)"
+          git push
