@@ -24,10 +24,13 @@ jobs:
       - name: Clone Repository
         env:
           GITHUBUSER: ${{ secrets.GITHUBUSER }}
+          GITHUBMAIL: ${{ secrets.GITHUBMAIL }}
           GITHUBTOCKEN: ${{ secrets.GITHUBTOCKEN }}
         run: |
           sudo apt update
           sudo apt install git -y
+          git config --global user.name "$GITHUBUSER"
+          git config --global user.email "$GITHUBMAIL"
           git clone https://$GITHUBUSER:$GITHUBTOCKEN@github.com/gfdgd-xi/gxde-os-mirror.git --depth=1
           git clone https://$GITHUBUSER:$GITHUBTOCKEN@github.com/gfdgd-xi/gxde-os-mirror-loader.git --depth=1
 
