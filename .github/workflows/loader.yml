@@ -9,11 +9,14 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Clone Repository
+        env:
+          GITHUBUSER: ${{ secrets.GITHUBUSER }}
+          GITHUBTOCKEN: ${{ secrets.GITHUBTOCKEN }}
         run: |
           sudo apt update
           sudo apt install git -y
-          git clone git@github.com:gfdgd-xi/gxde-os-mirror.git --depth=1
-          git clone git@github.com:gfdgd-xi/gxde-os-mirror-loader.git --depth=1
+          git clone https://$GITHUBUSER:$GITHUBTOCKEN@github.com/gfdgd-xi/gxde-os-mirror.git --depth=1
+          git clone https://$GITHUBUSER:$GITHUBTOCKEN@github.com/gfdgd-xi/gxde-os-mirror-loader.git --depth=1
 
       - name: Sync
         env:
@@ -21,7 +24,7 @@ jobs:
           RSYNCURL: ${{ secrets.RSYNCURL }}
         run: |
           sudo apt install rsync -y
-          echo $PASSWORD > /tmp/password.pass
+          echo $RSYNCPASSWORD > /tmp/password.pass
           chmod 600 /tmp/password.pass
           cp -rv gxde-os-mirror-loader/icons gxde-os-mirror
           cp -rv gxde-os-mirror-loader/40*.html gxde-os-mirror
