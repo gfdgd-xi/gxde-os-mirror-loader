@@ -45,7 +45,7 @@ jobs:
           cp -rv gxde-os-mirror-loader/icons gxde-os-mirror
           cp -rv gxde-os-mirror-loader/40*.html gxde-os-mirror
           cp -rv gxde-os-mirror-loader/50*.html gxde-os-mirror
-          rsync --progress --delay-updates -avpP --password-file=/tmp/password.pass -av  $RSYNCURL gxde-os-mirror --max-size=100m
+          rsync --progress --delay-updates --delete --exclude *.html -avpP --password-file=/tmp/password.pass -av  $RSYNCURL gxde-os-mirror --max-size=100m
           # 加载页面
           cd gxde-os-mirror
           python3 ../gxde-os-mirror-loader/build.py
