@@ -34,7 +34,7 @@ def Write(path: str):
     lists = sorted(lists, key=str.lower)
     for i in lists:
         if (i == "index.html" or i == "CNAME" or i == "build.py" or i == "build.sh" or i == ".git" or i == ".github" or "deb" == i[:3] or
-            i == "404.html" or i == "403.html" or i == "500.html" or i == "502.html"):
+            i == "404.html" or i == "403.html" or i == "500.html" or i == "502.html" or i[0] == "."):
             continue
         if os.path.isdir(f"{path}/{i}"):
             htmlstring += f'\n          <li><a href="{i}/"><img src="/icons/folder.svg" width=20px style="width=20px;vertical-align:middle;">  {i}/</a></li>'
